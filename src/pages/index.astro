@@ -1,0 +1,621 @@
+---
+import Layout from "../layouts/Layout.astro";
+
+const U = "https://images.unsplash.com/";
+const q = "?auto=format&fit=crop&q=80";
+
+const pokoje = [
+  {
+    id: "protok-23",
+    nr: "//01",
+    name: "Protokół 23",
+    tagline: "SZPIEGOSTWO / INFILTRACJA",
+    fabula: "Zostałeś zwerbowany do przejęcia dokumentów z bunkra Wydziału X. Masz 60 minut zanim serwery zostaną skasowane — i wszyscy zostaną wymazani razem z nimi.",
+    trudnosc: 75,
+    trudnosc_label: "WYSOKI",
+    osoby: "2–5",
+    czas: "60 MIN",
+    ucieczki: "34%",
+    img: U + "photo-1614036417651-efe5912149d8" + q + "&w=800",
+    accent: "neon",
+  },
+  {
+    id: "labirynt-zero",
+    nr: "//02",
+    name: "Labirynt Zero",
+    tagline: "SURVIVAL / PSYCHOTHRILLER",
+    fabula: "Obudziłeś się w kompleksie bez okien. Każde przejście prowadzi do kolejnej zagadki. Tylko jedno wyjście jest prawdziwe. Reszta to pułapki.",
+    trudnosc: 90,
+    trudnosc_label: "EKSTREMALNY",
+    osoby: "2–4",
+    czas: "60 MIN",
+    ucieczki: "18%",
+    img: U + "photo-1535016120720-40c646be5580" + q + "&w=800",
+    accent: "alarm",
+  },
+  {
+    id: "operacja-chimera",
+    nr: "//03",
+    name: "Operacja Chimera",
+    tagline: "BIOTERRORYZM / WYŚCIG Z CZASEM",
+    fabula: "Wirus szczep CHIMERA-7 zostaje uwolniony w zamkniętym laboratorium. Twój zespół ma wyizolować próbkę i aktywować system dezynfekcji. Zegarek tyka.",
+    trudnosc: 60,
+    trudnosc_label: "ŚREDNI",
+    osoby: "3–6",
+    czas: "60 MIN",
+    ucieczki: "51%",
+    img: U + "photo-1628251721369-9bab0845261e" + q + "&w=800",
+    accent: "neon",
+  },
+  {
+    id: "czarna-skrzynka",
+    nr: "//04",
+    name: "Czarna Skrzynka",
+    tagline: "KATASTROFA / DETEKTYW",
+    fabula: "Samolot TF-447 rozbił się 30 km od granic miasta. Zanim rząd wyczyści miejsce zdarzenia — musisz dotrzeć do prawdy ukrytej w czarnej skrzynce.",
+    trudnosc: 50,
+    trudnosc_label: "NORMALNY",
+    osoby: "2–6",
+    czas: "60 MIN",
+    ucieczki: "62%",
+    img: U + "photo-1566379938-f83c3c1c434b" + q + "&w=800",
+    accent: "neon",
+  },
+];
+
+const jakGrac = [
+  { nr: "01", label: "REZERWACJA", text: "Wybierz pokój, termin i liczbę graczy przez formularz lub telefon. Potwierdzenie w ciągu 10 minut." },
+  { nr: "02", label: "PRZYBYCIE", text: "Stawiasz się 15 minut przed startem. Odprawiamy was — żadnych telefonów, żadnych podpowiedzi." },
+  { nr: "03", label: "BRIEFING", text: "Gamemaster przedstawia zasady i wciela was w role. Od tej chwili jesteście agentami w misji." },
+  { nr: "04", label: "MISJA AKTYWNA", text: "60 minut. Możesz poprosić o 3 wskazówki. Wyjście awaryjne zawsze dostępne — bezpieczeństwo przede wszystkim." },
+];
+
+const dlaKogo = [
+  { icon: "🎂", label: "URODZINY", desc: "Wieczór urodzinowy pełen adrenaliny. Pakiet VIP — butelka prosecco, zdjęcia grupowe, dedykowane briefing od gamemastera." },
+  { icon: "🏢", label: "INTEGRACJA FIRMOWA", desc: "Team building, który działa. Faktura VAT, możliwość rezerwacji całego obiektu, raport z wynikami drużyn." },
+  { icon: "❤️", label: "RANDKA", desc: "Adrenalina zbliża. Pakiet Duo — romantyczny klimat, świece, butelka wina po rozgrywce. Dla 2 graczy." },
+  { icon: "👥", label: "ZNAJOMI", desc: "Najlepszy test przyjaźni pod presją. Grupy 2–6 osób. Zniżka dla grup powracających." },
+];
+
+const cennik = [
+  { osoby: "2 osoby", cena: "149 zł", note: "od osoby: 74,50 zł" },
+  { osoby: "3 osoby", cena: "189 zł", note: "od osoby: 63 zł" },
+  { osoby: "4 osoby", cena: "219 zł", note: "od osoby: 54,75 zł" },
+  { osoby: "5 osób",  cena: "249 zł", note: "od osoby: 49,80 zł" },
+  { osoby: "6 osób",  cena: "269 zł", note: "od osoby: 44,83 zł" },
+];
+
+const opinie = [
+  { autor: "Kamil R.", ocena: 5, text: "Labirynt Zero to coś innego. Wyszliśmy po 58 minutach, byliśmy mokrzy ze stresu. Wróciliśmy tydzień później na Protokół." },
+  { autor: "Agnieszka M.", ocena: 5, text: "Integracja firmowa dla 18 osób w trzech pokojach jednocześnie. Organizacja idealna, gamemastery profesjonalni. Polecam każdej firmie." },
+  { autor: "Bartek W.", ocena: 5, text: "Klimat naprawdę wciąga. Czujesz się jak w filmie. Chimera to dobry start dla tych co jeszcze nie grali." },
+  { autor: "Natalia i Piotr", ocena: 5, text: "Byliśmy na Czarnej Skrzynce na randkę. Zaskakujące, że razem rozwiązaliśmy wszystkie zagadki. Wino po — ponad oczekiwania." },
+];
+
+const navLinks = [
+  { href: "#pokoje", label: "POKOJE" },
+  { href: "#jak-grac", label: "JAK GRAĆ" },
+  { href: "#dla-kogo", label: "DLA KOGO" },
+  { href: "#cennik", label: "CENNIK" },
+  { href: "#opinie", label: "OPINIE" },
+  { href: "#rezerwacja", label: "REZERWACJA" },
+];
+---
+
+<Layout>
+
+<!-- ===== NAV ===== -->
+<nav id="nav" class="fixed inset-x-0 z-40 transition-all duration-300">
+  <div class="mx-auto flex max-w-[1440px] items-center justify-between px-6 py-4 lg:px-12">
+    <!-- Logo -->
+    <a href="#top" class="disp text-bone text-2xl tracking-widest flex items-center gap-2">
+      <span class="text-alarm glow-alarm">▶</span>
+      <span>SEKTOR<span class="text-neon glow-neon ml-1">7</span></span>
+    </a>
+
+    <!-- Desktop nav -->
+    <div class="hidden items-center gap-6 md:flex">
+      {navLinks.map((l) => (
+        <a href={l.href} class="mono text-steel text-xs tracking-widest uppercase hover:text-neon transition-colors duration-200">{l.label}</a>
+      ))}
+      <a href="#rezerwacja" class="btn-neon text-xs py-2 px-4 ml-2">ZAREZERWUJ</a>
+    </div>
+
+    <!-- Burger -->
+    <button id="burger" class="md:hidden flex flex-col gap-1.5 p-2" aria-label="Menu">
+      <span class="block w-6 h-px bg-bone"></span>
+      <span class="block w-6 h-px bg-bone"></span>
+      <span class="block w-4 h-px bg-neon"></span>
+    </button>
+  </div>
+
+  <!-- Mobile menu -->
+  <div id="mobile-menu" class="hidden md:hidden px-6 pb-4 flex flex-col gap-3">
+    {navLinks.map((l) => (
+      <a href={l.href} class="mono text-steel text-xs tracking-widest uppercase py-2 border-b border-steel/20 hover:text-neon transition-colors">{l.label}</a>
+    ))}
+    <a href="#rezerwacja" class="btn-neon text-xs py-3 text-center mt-2">ZAREZERWUJ</a>
+  </div>
+</nav>
+
+<!-- ===== HERO ===== -->
+<section id="top" class="relative min-h-screen flex flex-col justify-end overflow-hidden bg-void pb-16 pt-[8rem]">
+  <!-- Background image with overlay -->
+  <div class="absolute inset-0 z-0">
+    <img
+      src={U + "photo-1518709268805-4e9042af9f23" + q + "&w=1600"}
+      alt="Escape room — ciemny korytarz"
+      class="w-full h-full object-cover opacity-20"
+    />
+    <div class="absolute inset-0 bg-gradient-to-t from-void via-void/80 to-void/40"></div>
+    <div class="absolute inset-0 bg-gradient-to-r from-void/60 to-transparent"></div>
+  </div>
+
+  <!-- Content -->
+  <div class="relative z-10 mx-auto max-w-[1440px] px-6 lg:px-12 w-full">
+
+    <!-- Status bar -->
+    <div class="mono text-steel text-xs tracking-widest mb-8 flex items-center gap-4">
+      <span class="text-alarm glow-alarm animate-pulse">●</span>
+      <span>MISJA AKTYWNA</span>
+      <span class="text-steel/40">|</span>
+      <span>LOKALIZACJA: WARSZAWA, AL. SOLIDARNOŚCI 74</span>
+      <span class="text-steel/40">|</span>
+      <span>DOSTĘPNOŚĆ: SPRAWDŹ</span>
+    </div>
+
+    <!-- COUNTDOWN -->
+    <div data-countdown class="mb-6 flex items-baseline gap-2">
+      <span class="mono text-steel text-xs tracking-widest uppercase">Czas do końca misji:</span>
+      <span class="disp text-neon glow-neon text-5xl md:text-7xl tracking-tight">
+        <span data-cd-min>60</span><span class="colon-blink">:</span><span data-cd-sec>00</span>
+      </span>
+    </div>
+
+    <!-- Main headline — asymmetric, huge -->
+    <div class="mb-8 max-w-4xl">
+      <h1 class="disp leading-none">
+        <!-- Line 1: massive -->
+        <span
+          class="glitch block text-[clamp(4rem,12vw,12rem)] text-bone"
+          data-text="WYJDŹ"
+        >WYJDŹ</span>
+        <!-- Line 2: offset right, neon accent -->
+        <span class="block text-[clamp(3rem,9vw,9rem)] text-neon glow-neon ml-[8vw] md:ml-[12vw]">
+          JEŚLI POTRAFISZ
+        </span>
+        <!-- Line 3: small mono under -->
+        <span class="block mono text-steel text-sm tracking-[0.3em] mt-4 ml-1">
+          — ESCAPE ROOM / POKOJE ZAGADEK / WARSZAWA
+        </span>
+      </h1>
+    </div>
+
+    <!-- Subline + CTA row -->
+    <div class="flex flex-col sm:flex-row items-start sm:items-center gap-6">
+      <div>
+        <p class="text-bone/70 text-base max-w-md leading-relaxed">
+          Cztery pokoje. Cztery scenariusze. Jeden ma przeżywalność poniżej 20%.
+          <br/>Który wybierzesz?
+        </p>
+      </div>
+      <div class="flex flex-col sm:flex-row gap-3 sm:ml-auto">
+        <a href="#rezerwacja" class="btn-neon">
+          ZAREZERWUJ GRĘ
+        </a>
+        <a href="#pokoje" class="btn-alarm">
+          WYBIERZ MISJĘ
+        </a>
+      </div>
+    </div>
+
+    <!-- Stats row -->
+    <div class="mt-14 grid grid-cols-2 md:grid-cols-4 gap-px border border-steel/20">
+      {[
+        { val: "4", label: "pokoje zagadek" },
+        { val: "60", label: "minut napięcia" },
+        { val: "2–6", label: "graczy / misja" },
+        { val: "3200+", label: "misji ukończonych" },
+      ].map((s) => (
+        <div class="bg-dark/60 p-4 md:p-6 text-center backdrop-blur-sm">
+          <div class="disp text-neon glow-neon text-4xl md:text-5xl">{s.val}</div>
+          <div class="mono text-steel text-xs tracking-widest mt-1 uppercase">{s.label}</div>
+        </div>
+      ))}
+    </div>
+
+  </div>
+</section>
+
+<!-- ===== POKOJE / SCENARIUSZE ===== -->
+<section id="pokoje" class="py-24 bg-void relative">
+  <div class="mx-auto max-w-[1440px] px-6 lg:px-12">
+
+    <!-- Section header — asymmetric -->
+    <div class="mb-16 flex items-end justify-between gap-8 flex-wrap">
+      <div>
+        <div class="mono text-alarm text-xs tracking-[0.3em] mb-2">// DOSTĘPNE MISJE</div>
+        <h2 class="disp text-[clamp(3rem,7vw,7rem)] text-bone leading-none reveal">
+          WYBIERZ<br/>
+          <span class="text-neon glow-neon">SCENARIUSZ</span>
+        </h2>
+      </div>
+      <p class="mono text-steel text-xs leading-relaxed max-w-xs text-right reveal reveal-delay-2">
+        KAŻDY POKÓJ TO OSOBNA HISTORIA.<br/>
+        POZIOM TRUDNOŚCI: OD 50 DO 90%.<br/>
+        WEJŚCIE BEZ ODWROTU.
+      </p>
+    </div>
+
+    <!-- Rooms grid — intentionally uneven layout -->
+    <div class="space-y-0">
+      {pokoje.map((p, i) => (
+        <div class={`reveal group relative flex ${i % 2 === 0 ? 'flex-col md:flex-row' : 'flex-col md:flex-row-reverse'} border-b border-steel/15 py-8 md:py-0 gap-0 overflow-hidden`}>
+
+          <!-- Image panel -->
+          <div class="md:w-[42%] relative overflow-hidden" style="min-height:320px;">
+            <img
+              src={p.img}
+              alt={p.name}
+              class="w-full h-full object-cover absolute inset-0 transition-transform duration-700 group-hover:scale-105 opacity-60"
+            />
+            <div class="absolute inset-0 bg-gradient-to-r from-void/80 via-void/40 to-transparent"></div>
+            <!-- Number overlay -->
+            <div class="absolute top-4 left-4 disp text-[5rem] leading-none text-bone/10 font-black pointer-events-none select-none">
+              {p.nr}
+            </div>
+          </div>
+
+          <!-- Content panel -->
+          <div class="md:w-[58%] flex flex-col justify-center px-0 md:px-12 py-8 md:py-10 bg-dark/30 backdrop-blur-sm">
+            <div class="mono text-xs tracking-widest mb-3" style={p.accent === 'alarm' ? 'color:var(--color-alarm)' : 'color:var(--color-neon)'}>{p.tagline}</div>
+            <h3 class="disp text-[clamp(2rem,4vw,4rem)] text-bone leading-none mb-4">{p.name}</h3>
+            <p class="text-steel text-sm leading-relaxed mb-6 max-w-lg">{p.fabula}</p>
+
+            <!-- Meta row -->
+            <div class="flex flex-wrap gap-3 mb-5">
+              <span class="tag text-steel text-xs">GRACZE: {p.osoby}</span>
+              <span class="tag text-steel text-xs">CZAS: {p.czas}</span>
+              <span class="tag text-xs" style={p.accent === 'alarm' ? 'color:var(--color-alarm);border-color:var(--color-alarm)' : 'color:var(--color-neon);border-color:var(--color-neon)'}>UCIECZKI: {p.ucieczki}</span>
+            </div>
+
+            <!-- Difficulty bar -->
+            <div class="mb-5 max-w-xs">
+              <div class="flex justify-between mono text-xs text-steel mb-1">
+                <span>POZIOM TRUDNOŚCI</span>
+                <span style={p.accent === 'alarm' ? 'color:var(--color-alarm)' : 'color:var(--color-neon)'}>{p.trudnosc_label}</span>
+              </div>
+              <div class="diff-bar">
+                <div class="diff-fill" style={`width:${p.trudnosc}%`}></div>
+              </div>
+            </div>
+
+            <a href="#rezerwacja" class={p.accent === 'alarm' ? 'btn-alarm self-start' : 'btn-neon self-start'}>
+              WEJDŹ DO POKOJU →
+            </a>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<!-- ===== JAK GRAĆ ===== -->
+<section id="jak-grac" class="py-24 bg-panel relative overflow-hidden">
+  <!-- Background grid pattern -->
+  <div class="absolute inset-0 opacity-[0.03]" style="background-image: linear-gradient(var(--color-neon) 1px, transparent 1px), linear-gradient(90deg, var(--color-neon) 1px, transparent 1px); background-size: 40px 40px;"></div>
+
+  <div class="relative z-10 mx-auto max-w-[1440px] px-6 lg:px-12">
+
+    <div class="mono text-alarm text-xs tracking-[0.3em] mb-2 reveal">// PROTOKÓŁ WEJŚCIA</div>
+    <h2 class="disp text-[clamp(2.5rem,6vw,6rem)] text-bone leading-none mb-16 reveal">
+      JAK <span class="text-neon glow-neon">GRAĆ</span>
+    </h2>
+
+    <!-- Steps — diagonal layout -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-px bg-steel/10">
+      {jakGrac.map((s, i) => (
+        <div class={`reveal reveal-delay-${i + 1} bg-dark p-8 relative group`}>
+          <div class="disp text-[5rem] text-bone/5 absolute top-2 right-4 select-none pointer-events-none font-black">{s.nr}</div>
+          <div class="mono text-neon text-xs tracking-widest mb-3 glow-neon">{s.nr}</div>
+          <div class="disp text-xl text-bone mb-3">{s.label}</div>
+          <p class="text-steel text-sm leading-relaxed">{s.text}</p>
+          <div class="mt-4 h-px bg-neon/20 group-hover:bg-neon/60 transition-all duration-300"></div>
+        </div>
+      ))}
+    </div>
+
+    <!-- Rules callout -->
+    <div class="mt-12 border border-alarm/30 bg-alarm/5 p-6 md:p-8 reveal">
+      <div class="flex gap-4 items-start">
+        <span class="text-alarm text-2xl mt-0.5">⚠</span>
+        <div>
+          <div class="disp text-alarm text-xl mb-2">ZASADY BEZPIECZEŃSTWA</div>
+          <ul class="mono text-steel text-xs tracking-wide space-y-1 leading-relaxed">
+            <li>— WIEK MINIMALNY: 16 LAT (DZIECI 8–15 LAT W TOWARZYSTWIE DOROSŁEGO)</li>
+            <li>— OSOBY POD WPŁYWEM ALKOHOLU LUB ŚRODKÓW ODURZAJĄCYCH NIE SĄ WPUSZCZANE</li>
+            <li>— WYJŚCIE AWARYJNE DOSTĘPNE W KAŻDEJ CHWILI — BEZPIECZEŃSTWO GRACZY JEST PRIORYTETEM</li>
+            <li>— GWARANTUJEMY POUFNOŚĆ ROZWIĄZANIA — PROSIMY NIE SPOILEROWAĆ INNYM</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== DLA KOGO ===== -->
+<section id="dla-kogo" class="py-24 bg-void relative">
+  <div class="mx-auto max-w-[1440px] px-6 lg:px-12">
+
+    <div class="mono text-neon text-xs tracking-[0.3em] mb-2 reveal">// DOSTĘP DLA</div>
+    <h2 class="disp text-[clamp(2.5rem,6vw,6rem)] text-bone leading-none mb-16 reveal">
+      DLA <span class="text-alarm glow-alarm">KOGO</span>
+    </h2>
+
+    <!-- Asymmetric cards — not equal grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-px bg-steel/10">
+      {dlaKogo.map((d, i) => (
+        <div class={`reveal reveal-delay-${(i % 3) + 1} relative p-8 md:p-12 ${i === 0 ? 'bg-panel md:col-span-2 md:flex md:gap-12 md:items-center' : 'bg-dark'} group overflow-hidden`}>
+          <!-- Oversized background text -->
+          <div class="absolute bottom-2 right-4 disp text-[7rem] text-bone/[0.03] leading-none select-none pointer-events-none font-black">{d.label}</div>
+
+          <div class={i === 0 ? 'md:w-1/2' : ''}>
+            <div class="text-4xl mb-4 block">{d.icon}</div>
+            <div class="disp text-[clamp(1.5rem,3vw,2.5rem)] text-bone mb-3 leading-tight">{d.label}</div>
+            {i === 0 && <div class="mono text-alarm text-xs tracking-widest mb-3">PAKIET VIP DOSTĘPNY</div>}
+            <p class="text-steel text-sm leading-relaxed max-w-md">{d.desc}</p>
+          </div>
+          {i === 0 && (
+            <div class="md:w-1/2 mt-6 md:mt-0">
+              <a href="#rezerwacja" class="btn-alarm self-start">SPRAWDŹ PAKIET VIP</a>
+            </div>
+          )}
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<!-- ===== CENNIK ===== -->
+<section id="cennik" class="py-24 bg-panel relative overflow-hidden">
+  <div class="absolute inset-0 opacity-[0.02]" style="background-image: linear-gradient(var(--color-alarm) 1px, transparent 1px), linear-gradient(90deg, var(--color-alarm) 1px, transparent 1px); background-size: 60px 60px;"></div>
+
+  <div class="relative z-10 mx-auto max-w-[1440px] px-6 lg:px-12">
+
+    <div class="mono text-alarm text-xs tracking-[0.3em] mb-2 reveal">// CENNIK MISJI</div>
+    <h2 class="disp text-[clamp(2.5rem,6vw,6rem)] text-bone leading-none mb-4 reveal">
+      CENNIK
+    </h2>
+    <p class="mono text-steel text-xs tracking-wide mb-12 reveal">CENA ZA REZERWACJĘ POKOJU (NIE OD OSOBY) — IM WIĘCEJ GRACZY, TYM TANIEJ.</p>
+
+    <!-- Pricing table — left-heavy, not centered -->
+    <div class="max-w-2xl space-y-0">
+      {cennik.map((c, i) => (
+        <div class={`reveal reveal-delay-${i + 1} flex items-center justify-between border-b border-steel/15 py-5 group`}>
+          <div class="disp text-[clamp(1.5rem,3vw,2.5rem)] text-bone group-hover:text-neon transition-colors duration-200">
+            {c.osoby}
+          </div>
+          <div class="text-right">
+            <div class="disp text-[clamp(1.8rem,3.5vw,3rem)] text-neon glow-neon">{c.cena}</div>
+            <div class="mono text-steel text-xs tracking-wide">{c.note}</div>
+          </div>
+        </div>
+      ))}
+    </div>
+
+    <!-- Notes -->
+    <div class="mt-10 mono text-steel text-xs tracking-wide space-y-1 reveal">
+      <p>— CENA DOTYCZY WSZYSTKICH 4 POKOI (JEDNAKOWY CENNIK)</p>
+      <p>— PAKIET URODZINOWY / FIRMOWY — ZAPYTAJ O WYCENĘ INDYWIDUALNĄ</p>
+      <p>— STUDENTOM I UCZESTNIKOM POWTÓRNYM: -10% (POKAŻ LEGITYMACJĘ / POPRZEDNIĄ WIZYTĘ)</p>
+      <p>— REZERWACJA = PRZEDPŁATA 50% ONLINE, RESZTA NA MIEJSCU</p>
+    </div>
+
+  </div>
+</section>
+
+<!-- ===== OPINIE ===== -->
+<section id="opinie" class="py-24 bg-void">
+  <div class="mx-auto max-w-[1440px] px-6 lg:px-12">
+
+    <div class="mono text-neon text-xs tracking-[0.3em] mb-2 reveal">// RAPORTY AGENTÓW</div>
+    <h2 class="disp text-[clamp(2.5rem,6vw,6rem)] text-bone leading-none mb-16 reveal">
+      OPINIE<br/>
+      <span class="text-steel text-[0.5em]">GRACZY</span>
+    </h2>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-px bg-steel/10">
+      {opinie.map((o, i) => (
+        <div class={`reveal reveal-delay-${(i % 2) + 1} bg-dark p-8 group relative overflow-hidden`}>
+          <div class="absolute top-0 left-0 w-1 h-full bg-neon/40 group-hover:bg-neon transition-all duration-300"></div>
+          <div class="flex gap-1 mb-4 pl-4">
+            {Array.from({length: o.ocena}).map(() => (
+              <span class="text-neon text-sm glow-neon">★</span>
+            ))}
+          </div>
+          <blockquote class="text-bone/80 text-sm leading-relaxed italic mb-5 pl-4">
+            „{o.text}"
+          </blockquote>
+          <div class="mono text-steel text-xs tracking-widest pl-4">— {o.autor}</div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<!-- ===== REZERWACJA + MAPA ===== -->
+<section id="rezerwacja" class="py-24 bg-panel relative">
+  <div class="absolute inset-0 opacity-[0.025]" style="background-image: linear-gradient(var(--color-neon) 1px, transparent 1px), linear-gradient(90deg, var(--color-neon) 1px, transparent 1px); background-size: 32px 32px;"></div>
+
+  <div class="relative z-10 mx-auto max-w-[1440px] px-6 lg:px-12">
+
+    <div class="mono text-alarm text-xs tracking-[0.3em] mb-2 reveal">// AKTYWUJ MISJĘ</div>
+    <h2 class="disp text-[clamp(2.5rem,6vw,6rem)] text-bone leading-none mb-16 reveal">
+      REZERWACJA
+    </h2>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-0">
+
+      <!-- Form -->
+      <div class="bg-dark p-8 md:p-10 reveal">
+        <form class="space-y-4" onsubmit="return false;">
+          <div class="mono text-neon text-xs tracking-widest mb-6 glow-neon">FORMULARZ REZERWACJI</div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label class="mono text-steel text-xs tracking-widest block mb-1">IMIĘ I NAZWISKO</label>
+              <input type="text" placeholder="Jan Kowalski" class="field" />
+            </div>
+            <div>
+              <label class="mono text-steel text-xs tracking-widest block mb-1">TELEFON</label>
+              <input type="tel" placeholder="+48 000 000 000" class="field" />
+            </div>
+          </div>
+
+          <div>
+            <label class="mono text-steel text-xs tracking-widest block mb-1">E-MAIL</label>
+            <input type="email" placeholder="agent@sektor7.pl" class="field" />
+          </div>
+
+          <div>
+            <label class="mono text-steel text-xs tracking-widest block mb-1">WYBIERZ POKÓJ</label>
+            <select class="field">
+              <option value="">— Wybierz scenariusz —</option>
+              <option>Protokół 23 (WYSOKI)</option>
+              <option>Labirynt Zero (EKSTREMALNY)</option>
+              <option>Operacja Chimera (ŚREDNI)</option>
+              <option>Czarna Skrzynka (NORMALNY)</option>
+            </select>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label class="mono text-steel text-xs tracking-widest block mb-1">PREFEROWANA DATA</label>
+              <input type="date" class="field" />
+            </div>
+            <div>
+              <label class="mono text-steel text-xs tracking-widest block mb-1">LICZBA GRACZY</label>
+              <select class="field">
+                <option>2</option>
+                <option>3</option>
+                <option>4</option>
+                <option>5</option>
+                <option>6</option>
+              </select>
+            </div>
+          </div>
+
+          <div>
+            <label class="mono text-steel text-xs tracking-widest block mb-1">UWAGI / PAKIET SPECJALNY</label>
+            <textarea class="field resize-none" rows="3" placeholder="Urodziny, integracja firmowa, pakiet VIP..."></textarea>
+          </div>
+
+          <button type="submit" class="btn-neon w-full text-center py-4 mt-2">
+            ZATWIERDŹ MISJĘ →
+          </button>
+
+          <p class="mono text-steel text-xs text-center tracking-wide mt-2">
+            Potwierdzenie w ciągu 10 minut. Przedpłata 50% przy potwierdzeniu.
+          </p>
+        </form>
+      </div>
+
+      <!-- Contact + Map -->
+      <div class="flex flex-col reveal reveal-delay-2">
+        <!-- Map OSM -->
+        <div class="flex-1 min-h-[300px] relative bg-dark border border-steel/10">
+          <iframe
+            src="https://www.openstreetmap.org/export/embed.html?bbox=21.00%2C52.24%2C21.02%2C52.26&layer=mapnik&marker=52.2517%2C21.0100"
+            class="w-full h-full min-h-[300px]"
+            style="border:0;filter:invert(0.9) hue-rotate(180deg) saturate(0.3);"
+            title="Mapa dojazdu do Sektor 7"
+            loading="lazy"
+          ></iframe>
+          <div class="absolute bottom-0 left-0 right-0 p-3 bg-void/80 backdrop-blur-sm">
+            <p class="mono text-neon text-xs tracking-wide glow-neon">SEKTOR 7 — al. Solidarności 74, Warszawa</p>
+          </div>
+        </div>
+
+        <!-- Contact info -->
+        <div class="bg-dark p-8 border-t border-steel/10">
+          <div class="mono text-neon text-xs tracking-widest mb-5 glow-neon">KANAŁY KONTAKTU</div>
+          <div class="space-y-4">
+            {[
+              { label: "TELEFON", val: "+48 22 123 45 67" },
+              { label: "E-MAIL", val: "misja@sektor7.pl" },
+              { label: "ADRES", val: "al. Solidarności 74, 00-240 Warszawa" },
+              { label: "GODZINY", val: "Pn–Pt 14:00–22:00 / Sb–Nd 10:00–23:00" },
+            ].map((c) => (
+              <div class="flex gap-4 border-b border-steel/10 pb-3">
+                <div class="mono text-alarm text-xs tracking-widest w-20 shrink-0 pt-0.5">{c.label}</div>
+                <div class="text-bone/80 text-sm">{c.val}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer class="bg-void border-t border-steel/10 py-12">
+  <div class="mx-auto max-w-[1440px] px-6 lg:px-12">
+
+    <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-8 mb-8">
+      <!-- Brand -->
+      <div>
+        <div class="disp text-3xl text-bone mb-1">
+          SEKTOR <span class="text-neon glow-neon">7</span>
+        </div>
+        <div class="mono text-steel text-xs tracking-widest">ESCAPE ROOM / WARSZAWA / EST. 2019</div>
+      </div>
+      <!-- Nav -->
+      <nav class="flex flex-wrap gap-4 md:gap-6">
+        {navLinks.map((l) => (
+          <a href={l.href} class="mono text-steel text-xs tracking-widest uppercase hover:text-neon transition-colors">{l.label}</a>
+        ))}
+      </nav>
+    </div>
+
+    <hr class="sep-neon mb-8" />
+
+    <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+      <div class="mono text-steel text-xs tracking-wide">
+        © {new Date().getFullYear()} Sektor 7 Sp. z o.o. — Wszelkie prawa zastrzeżone.
+      </div>
+      <!-- Mandatory credit -->
+      <div class="mono text-steel/50 text-xs tracking-wide">
+        Przykładowa strona zrobiona przez
+        <a href="https://stronainternetowa.biz" target="_blank" rel="noopener"
+           class="text-neon/70 hover:text-neon transition-colors ml-1">
+          stronainternetowa.biz
+        </a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<style>
+  /* Nav transparent until scroll */
+  #nav {
+    background: transparent;
+  }
+  #nav.scrolled {
+    background: color-mix(in srgb, var(--color-void) 92%, transparent);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(74,222,128,0.15);
+  }
+  /* Mobile menu bg override */
+  #mobile-menu {
+    background: var(--color-dark);
+    border-top: 1px solid rgba(74,222,128,0.15);
+  }
+  /* Input date color fix */
+  input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+    opacity: 0.5;
+  }
+</style>
+
+</Layout>

@@ -1,0 +1,17 @@
+{
+  "name": "sektor-7",
+  "type": "module",
+  "version": "1.0.0",
+  "description": "Sektor 7 — escape room, pokoje zagadek, rezerwacje online",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": { "astro": "^5.7.0" },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.0.17",
+    "tailwindcss": "^4.0.17"
+  }
+}

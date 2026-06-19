@@ -1,0 +1,304 @@
+@import "tailwindcss";
+
+/* ===== Sektor 7 — IMMERSYJNY MROK / KINO-THRILLER ===== */
+@theme {
+  --font-display: "Saira Condensed", "Oswald", sans-serif;
+  --font-mono: "Space Mono", monospace;
+  --font-body: "Barlow", system-ui, sans-serif;
+
+  --color-void:    #07080a;
+  --color-dark:    #0d0f12;
+  --color-panel:   #111318;
+  --color-steel:   #7b828a;
+  --color-bone:    #e9ecee;
+  --color-neon:    #4ade80;
+  --color-alarm:   #ef2b2b;
+  --color-neon-dim:#1a5e34;
+  --color-alarm-dim:#5e1212;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-family: var(--font-body);
+  color: var(--color-bone);
+  background: var(--color-void);
+}
+body { -webkit-font-smoothing: antialiased; }
+
+/* ===== SCANLINE overlay ===== */
+body::after {
+  content: "";
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent 0px,
+    transparent 3px,
+    rgba(0,0,0,0.18) 3px,
+    rgba(0,0,0,0.18) 4px
+  );
+  mix-blend-mode: multiply;
+}
+
+/* ===== Grain noise overlay ===== */
+body::before {
+  content: "";
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: 9998;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 200px 200px;
+}
+
+/* ===== PROMO BAR ===== */
+#promo-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 60;
+  height: 2.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: .4rem;
+  background: #0d0d10;
+  color: #f3f3f1;
+  font-size: .72rem;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  text-decoration: none;
+  padding: 0 1rem;
+  text-align: center;
+  font-family: var(--font-mono);
+  border-bottom: 1px solid rgba(74,222,128,0.2);
+}
+#promo-bar strong { font-weight: 700; color: var(--color-neon); }
+#promo-bar:hover { background: #16161a; }
+#nav { top: 2.25rem; }
+
+/* ===== REVEAL SCROLL ===== */
+.reveal {
+  opacity: 0;
+  transform: translateY(32px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+.reveal-delay-1 { transition-delay: 0.1s; }
+.reveal-delay-2 { transition-delay: 0.2s; }
+.reveal-delay-3 { transition-delay: 0.3s; }
+.reveal-delay-4 { transition-delay: 0.4s; }
+
+/* ===== GLITCH ===== */
+@keyframes glitch-1 {
+  0%   { clip-path: inset(20% 0 60% 0); transform: translate(-4px, 0); }
+  20%  { clip-path: inset(60% 0 5% 0);  transform: translate(4px, 0); }
+  40%  { clip-path: inset(40% 0 30% 0); transform: translate(-2px, 0); }
+  60%  { clip-path: inset(10% 0 70% 0); transform: translate(2px, 0); }
+  80%  { clip-path: inset(80% 0 2% 0);  transform: translate(-3px, 0); }
+  100% { clip-path: inset(50% 0 40% 0); transform: translate(0, 0); }
+}
+@keyframes glitch-2 {
+  0%   { clip-path: inset(65% 0 10% 0); transform: translate(4px, 0); color: var(--color-alarm); }
+  25%  { clip-path: inset(5% 0 80% 0);  transform: translate(-4px, 0); color: var(--color-neon); }
+  50%  { clip-path: inset(35% 0 50% 0); transform: translate(3px, 0); color: var(--color-alarm); }
+  75%  { clip-path: inset(75% 0 15% 0); transform: translate(-2px, 0); color: var(--color-neon); }
+  100% { clip-path: inset(20% 0 70% 0); transform: translate(0, 0); color: var(--color-alarm); }
+}
+
+.glitch {
+  position: relative;
+  display: inline-block;
+}
+.glitch::before,
+.glitch::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100%;
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+  line-height: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
+}
+.glitch::before {
+  color: var(--color-neon);
+  animation: glitch-1 3.5s infinite steps(1);
+  opacity: 0.7;
+}
+.glitch::after {
+  color: var(--color-alarm);
+  animation: glitch-2 4.2s infinite steps(1) 0.8s;
+  opacity: 0.6;
+}
+
+/* ===== COUNTDOWN blink ===== */
+@keyframes blink-colon {
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}
+.colon-blink { animation: blink-colon 1s infinite; }
+
+/* ===== NAV scrolled ===== */
+#nav.scrolled {
+  background: color-mix(in srgb, var(--color-void) 92%, transparent);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(74,222,128,0.15);
+}
+
+/* ===== NEON BUTTON ===== */
+.btn-neon {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-neon);
+  border: 1px solid var(--color-neon);
+  padding: 0.75rem 2rem;
+  position: relative;
+  transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+  cursor: pointer;
+  text-decoration: none;
+}
+.btn-neon:hover {
+  background: var(--color-neon);
+  color: var(--color-void);
+  box-shadow: 0 0 24px rgba(74,222,128,0.5), 0 0 48px rgba(74,222,128,0.2);
+}
+.btn-alarm {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-alarm);
+  border: 1px solid var(--color-alarm);
+  padding: 0.75rem 2rem;
+  position: relative;
+  transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+  cursor: pointer;
+  text-decoration: none;
+}
+.btn-alarm:hover {
+  background: var(--color-alarm);
+  color: var(--color-bone);
+  box-shadow: 0 0 24px rgba(239,43,43,0.5), 0 0 48px rgba(239,43,43,0.2);
+}
+
+/* ===== UTILITY CLASSES ===== */
+.disp  { font-family: var(--font-display); text-transform: uppercase; line-height: 0.9; }
+.mono  { font-family: var(--font-mono); }
+.body-f { font-family: var(--font-body); }
+.text-neon  { color: var(--color-neon); }
+.text-alarm { color: var(--color-alarm); }
+.text-steel { color: var(--color-steel); }
+.text-bone  { color: var(--color-bone); }
+.bg-void    { background: var(--color-void); }
+.bg-dark    { background: var(--color-dark); }
+.bg-panel   { background: var(--color-panel); }
+
+/* neon glow text */
+.glow-neon  { text-shadow: 0 0 12px rgba(74,222,128,0.7), 0 0 30px rgba(74,222,128,0.3); }
+.glow-alarm { text-shadow: 0 0 12px rgba(239,43,43,0.7), 0 0 30px rgba(239,43,43,0.3); }
+
+/* border neon */
+.border-neon  { border-color: var(--color-neon); }
+.border-alarm { border-color: var(--color-alarm); }
+.border-steel { border-color: var(--color-steel); }
+
+/* neon underline accent */
+.neon-line {
+  display: inline-block;
+  border-bottom: 2px solid var(--color-neon);
+  padding-bottom: 2px;
+}
+.alarm-line {
+  display: inline-block;
+  border-bottom: 2px solid var(--color-alarm);
+  padding-bottom: 2px;
+}
+
+/* section separator */
+.sep-neon {
+  border: none;
+  height: 1px;
+  background: linear-gradient(to right, transparent, var(--color-neon), transparent);
+  opacity: 0.3;
+}
+
+/* difficulty bar */
+.diff-bar {
+  height: 4px;
+  background: var(--color-panel);
+  border: 1px solid rgba(255,255,255,0.08);
+  position: relative;
+  overflow: hidden;
+}
+.diff-fill {
+  height: 100%;
+  background: linear-gradient(to right, var(--color-neon), var(--color-alarm));
+}
+
+/* form inputs */
+.field {
+  width: 100%;
+  background: transparent;
+  border: 1px solid rgba(123,130,138,0.4);
+  color: var(--color-bone);
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  padding: 0.7rem 1rem;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.field:focus { border-color: var(--color-neon); }
+.field option { background: var(--color-dark); color: var(--color-bone); }
+
+/* tag label */
+.tag {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  border: 1px solid currentColor;
+  padding: 0.2rem 0.55rem;
+}
+
+/* ===== CURSOR (kinetyczny) ===== */
+#cursor-dot {
+  pointer-events: none;
+  position: fixed;
+  width: 8px;
+  height: 8px;
+  background: var(--color-neon);
+  border-radius: 50%;
+  z-index: 10000;
+  transform: translate(-50%, -50%);
+  transition: opacity 0.3s;
+  mix-blend-mode: screen;
+}
+
+/* selection */
+::selection {
+  background: var(--color-neon);
+  color: var(--color-void);
+}
+
+/* ===== MOBILE MENU ===== */
+#mobile-menu {
+  background: var(--color-dark);
+  border-top: 1px solid rgba(74,222,128,0.2);
+}
